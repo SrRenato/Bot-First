@@ -1,67 +1,52 @@
 const Discord = require("discord.js");
-const { prefix, token } = require("./config.json");
 const ytdl = require("ytdl-core"); // biblioteca de musica!
-
+const Enmap = require("enmap");
 const queue = new Map(); // lista musica
 
 const bot = new Discord.Client();
 
 const fs = require("fs");
+const config = require("./config.json");
+bot.config = config;
+
 bot.commands = new Discord.Collection();
+bot.commands = new Enmap();
+
+// SINCRONIZA COM A PASTA EVENT
+fs.readdir("./events/", (err, files) => {
+  if (err) return console.error(err);
+  files.forEach((file) => {
+    const event = require(`./events/${file}`);
+    let eventName = file.split(".")[0];
+    bot.on(eventName, event.bind(null, bot));
+  });
+});
 
 // SINCRONIZA COM A PASTA COMMANDS
-const commandFiles = fs
-  .readdirSync("./commands/")
-  .filter((file) => file.endsWith(".js"));
-for (const file of commandFiles) {
-  const command = require(`./commands/${file}`);
-
-  bot.commands.set(command.name, command);
-}
-// COMANDOS
-bot.on("message", (message) => {
-  let args = message.content.substring(prefix.length).split(" ");
-
-  switch (args[0]) {
-    case "oi":
-      bot.commands.get("oi").execute(message, args);
-      break;
-    case "help":
-      bot.commands.get("help").execute(message, args);
-      break;
-    case "sac":
-      bot.commands.get("sac").execute(message, args);
-      break;
-  }
+fs.readdir("./commands/", (err, files) => {
+  if (err) return console.error(err);
+  files.forEach((file) => {
+    if (!file.endsWith(".js")) return;
+    let props = require(`./commands/${file}`);
+    let commandName = file.split(".")[0];
+    console.log(`carregando ${commandName}`);
+    bot.commands.set(commandName, props);
+  });
 });
-// STATUS DO BOT
-bot.once("ready", () => {
-  console.log("Ready!");
-});
-
-bot.once("reconnecting", () => {
-  console.log("Reconnecting!");
-});
-
-bot.once("disconnect", () => {
-  console.log("Disconnect!");
-});
-
 //BOT DE MUSICA
 
 bot.on("message", async (message) => {
   if (message.author.bot) return; // verifica se o autor da mensagem e o nosso bot!!
-  if (!message.content.startsWith(prefix)) return;
-
+  if (!message.content.startsWith(config.prefix)) return;
   const serverQueue = queue.get(message.guild.id);
 
-  if (message.content.startsWith(`${prefix}play`)) {
+  if (message.content.startsWith(`${config.prefix}play`)) {
     execute(message, serverQueue);
     return;
-  } else if (message.content.startsWith(`${prefix}skip`)) {
+  } else if (message.content.startsWith(`${config.prefix}skip`)) {
     skip(message, serverQueue);
     return;
-  } else if (message.content.startsWith(`${prefix}stop`)) {
+  } else if (message.content.startsWith(`${config.prefix}stop`)) {
     stop(message, serverQueue);
     return;
   }
@@ -156,4 +141,4 @@ function play(guild, song) {
   serverQueue.textChannel.send(`Start playing: **${song.title}**`);
 }
 
-bot.login(token);
+bot.login(config.token);

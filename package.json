@@ -1,12 +1,12 @@
 {
   "name": "botdiscord",
   "version": "1.0.0",
-  "description": "Meu primeiro bot para discord",
+  "description": "https://github.com/SrRenato/Bot-First",
   "main": "bot.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Renato Augusto",
   "license": "ISC",
   "dependencies": {
     "@discordjs/opus": "^0.3.2",
