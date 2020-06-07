@@ -15,6 +15,9 @@
     "enmap": "^5.2.5",
     "ffmpeg": "0.0.4",
     "fluent-ffmpeg": "^2.1.2",
+    "random-puppy": "^1.1.0",
+    "strip-indent": "^3.0.0",
+    "superagent": "^5.2.2",
     "ytdl-core": "^3.1.0"
   }
 }

@@ -1,6 +1,6 @@
 exports.run = async (client, message, args) => {
   message.delete();
-  if (!message.guild.me.hasPermission("MANAGE_MESSAGES"))
+  if (!message.member.hasPermission("ADMINISTRATOR"))
     return message.reply("⚠️ Comando apenas para admins!");
 
   const deleteCount = parseInt(args[0], 10);

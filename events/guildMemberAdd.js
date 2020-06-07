@@ -1,22 +1,24 @@
 module.exports = async (client, member) => {
-  const embed = {
-    color: 8311585,
-    timestamp: new Date(),
-    footer: {
-      icon_url: client.user.avatarURL,
-      text: "Data de entrada",
-    },
-    author: {
-      name: member.user.username,
-      icon_url: member.user.avatarURL,
-    },
-    fields: [
-      {
-        name: "Bem vindo(a)",
-        value:
-          "Leia as <#464522380849709056> para não tomar KICK/BAN e mantenha um bom relacionamento com o pessoal :sunglasses: ",
+  member.guild.channels.cache.get("717712237497679977").send({
+    embed: {
+      color: 3447003,
+      timestamp: new Date(),
+      footer: {
+        icon_url: client.user.avatarURL(),
+        text: member.guild.name,
       },
-    ],
-  };
-  member.guild.channels.get("464520117770780678").send({ embed });
+      author: {
+        name: member.user.username,
+        icon_url: member.user.avatarURL(),
+      },
+      fields: [
+        {
+          name: "Seja bemvindo(a)",
+          value: "Leia as <#> para não tomar kick",
+        },
+      ],
+
+      description: `seja bem vindo ${member}`,
+    },
+  });
 };

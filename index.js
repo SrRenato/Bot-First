@@ -33,6 +33,7 @@ fs.readdir("./commands/", (err, files) => {
     bot.commands.set(commandName, props);
   });
 });
+
 //BOT DE MUSICA
 
 bot.on("message", async (message) => {
